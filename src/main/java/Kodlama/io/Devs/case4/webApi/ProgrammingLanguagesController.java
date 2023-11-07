@@ -29,8 +29,13 @@ public class ProgrammingLanguagesController {
     }
 
     @DeleteMapping("delete/{id}")
-    ProgrammingLanguage deleteById(@PathVariable int id) throws Exception {
-        return programmingLanguageService.deleteById(id);
+    public void deleteById(@PathVariable int id) throws Exception {
+         this.programmingLanguageService.deleteById(id);
+    }
+
+    @DeleteMapping("/deletebyname/{name}")
+    public void deleteByName(@PathVariable String name) throws Exception {
+        this.programmingLanguageService.deleteByName(name);
     }
 
     @PostMapping("/add")
@@ -39,13 +44,8 @@ public class ProgrammingLanguagesController {
     }
 
     @PutMapping("/update")
-    public void update(@RequestBody ProgrammingLanguage programmingLanguage){
-        programmingLanguageService.update(programmingLanguage);
+    public void updateById(@RequestBody ProgrammingLanguage programmingLanguage) throws Exception {
+        this.programmingLanguageService.update(programmingLanguage);
     }
-
-//    @DeleteMapping("/delete")
-//    public void delete(@RequestBody ProgrammingLanguage programmingLanguage){
-//        programmingLanguageService.delete(programmingLanguage);
-//    }
 
 }

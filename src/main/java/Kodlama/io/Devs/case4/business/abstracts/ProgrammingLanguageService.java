@@ -7,8 +7,8 @@ import java.util.List;
 public interface ProgrammingLanguageService {
     List<ProgrammingLanguage> getAll();
     ProgrammingLanguage getById(int id) throws Exception;
-    ProgrammingLanguage deleteById(int id) throws Exception;
+    void deleteById(int id) throws Exception;
     void add(ProgrammingLanguage programmingLanguage) throws Exception;
-    void update(ProgrammingLanguage programmingLanguage);
-    //void delete(ProgrammingLanguage programmingLanguage);
+    void update(ProgrammingLanguage programmingLanguage) throws Exception;
+    void deleteByName(String name) throws Exception;
 }

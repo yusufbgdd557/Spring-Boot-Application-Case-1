@@ -4,9 +4,11 @@ import Kodlama.io.Devs.case4.business.abstracts.ProgrammingLanguageService;
 import Kodlama.io.Devs.case4.dataAccess.abstracts.ProgrammingLanguageRepository;
 import Kodlama.io.Devs.case4.entities.concretes.ProgrammingLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProgrammingLanguageManager implements ProgrammingLanguageService {
@@ -20,46 +22,100 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
 
     @Override
     public List<ProgrammingLanguage> getAll() {
-        return programmingLanguageRepository.getAll();
+
+        Sort sort = Sort.by(Sort.Order.asc("id"));
+        return programmingLanguageRepository.findAll(sort);
     }
+    // This does not work and i can not get why!P
+//    @Override
+//    public ProgrammingLanguage getById(int id) throws Exception {
+//
+//        ProgrammingLanguage programmingLanguage = programmingLanguageRepository.getById(id);
+//
+//        if (programmingLanguage == null){
+//            throw new Exception("There is no language to be brought with this id!");
+//        }
+//
+//        return programmingLanguage;
+//    }
+
+    //This one works but in a list of millions of items it would be dead slow so i avoid using it!
+//    public ProgrammingLanguage getById(int id) throws Exception{
+//        List<ProgrammingLanguage> allLanguages = programmingLanguageRepository.findAll();
+//        for (ProgrammingLanguage theLanguage : allLanguages) {
+//            if (theLanguage.getId() == id){
+//                return theLanguage;
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
-    public ProgrammingLanguage getById(int id) throws Exception {
-        ProgrammingLanguage programmingLanguage = programmingLanguageRepository.getById(id);
-        if (programmingLanguage == null){
+    public ProgrammingLanguage getById(int id) throws Exception{
+        Optional<ProgrammingLanguage> optionalProgrammingLanguage = programmingLanguageRepository.findById(id);// Here i used Optional to be able to see if the given id is null or not
+
+        if (optionalProgrammingLanguage.isEmpty()){
             throw new Exception("There is no language to be brought with this id!");
         }
-        return programmingLanguageRepository.getById(id);
+        return optionalProgrammingLanguage.get(); // Here i am using get() to get the value, if there is.
     }
 
     @Override
-    public ProgrammingLanguage deleteById(int id) throws Exception {
+    public void deleteById(int id) throws Exception {
+
         if(getById(id) == null){
             throw new Exception("There is no language with this id");
         }
-        return programmingLanguageRepository.deleteById(id);
+
+        this.programmingLanguageRepository.deleteById(id);
     }
 
     @Override
     public void add(ProgrammingLanguage programmingLanguage) throws Exception{
+
         if (programmingLanguage.getName() == null){
             throw new Exception("Programming name can not be empty!");
         }
-        for (ProgrammingLanguage theLanguage : programmingLanguageRepository.getAll()) {
+        for (ProgrammingLanguage theLanguage : programmingLanguageRepository.findAll()) {
             if (theLanguage.getName().equalsIgnoreCase(programmingLanguage.getName())){
                 throw new Exception("Programming language can not repeat!");
             }
         }
-        programmingLanguageRepository.add(programmingLanguage);
+        programmingLanguageRepository.save(programmingLanguage);
     }
 
     @Override
-    public void update(ProgrammingLanguage programmingLanguage) {
-        programmingLanguageRepository.update(programmingLanguage);
+    public void update(ProgrammingLanguage programmingLanguage) throws Exception {
+        try {
+            ProgrammingLanguage language = programmingLanguageRepository.getById(programmingLanguage.getId());
+
+                language.setName(programmingLanguage.getName());
+                this.programmingLanguageRepository.save(language);
+
+        }
+//        for (ProgrammingLanguage theLanguage : allLanguages) {
+//            if(theLanguage.getId() == programmingLanguage.getId()){
+//                theLanguage.setName(programmingLanguage.getName());
+//                this.programmingLanguageRepository.save(theLanguage);
+//                return; //The Programming Language name is updated and function is finished and ended. If not then exception will be thrown...
+//            }
+//        }
+        catch (Exception e){
+            throw new Exception("There is no such Programming Language with this name to update --> " + programmingLanguage.getId());
+        }
     }
 
-//    @Override
-//    public void delete(ProgrammingLanguage programmingLanguage) {
-//        programmingLanguageRepository.delete(programmingLanguage);
-//    }
+    @Override
+    public void deleteByName(String name) throws Exception {
+        List<ProgrammingLanguage> allLanguages = programmingLanguageRepository.findAll();
+
+        for (ProgrammingLanguage theLanguage : allLanguages) {
+            if (theLanguage.getName().equalsIgnoreCase(name)){
+                this.programmingLanguageRepository.delete(theLanguage);
+                return;
+            }
+        }
+        throw new Exception("There is no such Programmin Language with this name --> " + name);
+    }
+
 }
