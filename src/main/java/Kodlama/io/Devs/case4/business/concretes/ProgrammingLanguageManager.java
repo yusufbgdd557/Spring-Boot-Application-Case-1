@@ -87,7 +87,7 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     @Override
     public void update(ProgrammingLanguage programmingLanguage) throws Exception {
         try {
-            ProgrammingLanguage language = programmingLanguageRepository.getById(programmingLanguage.getId());
+            ProgrammingLanguage language = getById(programmingLanguage.getId());
 
                 language.setName(programmingLanguage.getName());
                 this.programmingLanguageRepository.save(language);
@@ -105,8 +105,12 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
         }
     }
 
+
+    //This function is unnecessary. Because the items would have a unique parameter which is "id" so that function written for fun :D
+    //Because in a list of million items that would be so slow function. Like for long terms it's not recommended!
     @Override
     public void deleteByName(String name) throws Exception {
+
         List<ProgrammingLanguage> allLanguages = programmingLanguageRepository.findAll();
 
         for (ProgrammingLanguage theLanguage : allLanguages) {
