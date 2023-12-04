@@ -60,7 +60,6 @@
 			<artifactId>spring-dotenv</artifactId>
 			<version>2.5.4</version> <!-- For environment files -->
 		</dependency>
-
 	</dependencies>
 
 	<build>
