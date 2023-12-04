@@ -5,15 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "ProgrammingLanguages")
+@Table(name = "SubTechnologies")
 @Entity
-public class ProgrammingLanguage {
-
+public class SubTechnology {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,6 +19,8 @@ public class ProgrammingLanguage {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "programmingLanguage")//Sub Technologies sınıfında oluşturduğumuz referansa ithaf
-    private List<SubTechnology> subTechnologies;
+    @ManyToOne
+    @JoinColumn(name = "programming_language_id", referencedColumnName = "id")//Programming Language sınıfındaki "Id"den besleniyor ve bu tabloya eklenen yeni kolonun adı "programming_language_id" olacak
+    private ProgrammingLanguage programmingLanguage;
+
 }

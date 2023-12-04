@@ -1,6 +1,8 @@
 package Kodlama.io.Devs.case4.webApi;
 
 import Kodlama.io.Devs.case4.business.abstracts.ProgrammingLanguageService;
+import Kodlama.io.Devs.case4.business.requests.CreateProgrammingLanguageRequest;
+import Kodlama.io.Devs.case4.business.responses.GetAllProgrammingLanguagesResponse;
 import Kodlama.io.Devs.case4.entities.concretes.ProgrammingLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ public class ProgrammingLanguagesController {
     }
 
     @GetMapping("/getAll")
-    List<ProgrammingLanguage> getAll(){
+    List<GetAllProgrammingLanguagesResponse> getAll(){
         return programmingLanguageService.getAll();
     }
 
@@ -39,8 +41,8 @@ public class ProgrammingLanguagesController {
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody ProgrammingLanguage programmingLanguage) throws Exception {
-         programmingLanguageService.add(programmingLanguage);
+    public void add(@RequestBody CreateProgrammingLanguageRequest createProgrammingLanguageRequest) throws Exception {
+         programmingLanguageService.add(createProgrammingLanguageRequest);
     }
 
     @PutMapping("/update")

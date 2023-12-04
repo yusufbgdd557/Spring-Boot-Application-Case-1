@@ -1,12 +1,15 @@
 package Kodlama.io.Devs.case4.business.concretes;
 
 import Kodlama.io.Devs.case4.business.abstracts.ProgrammingLanguageService;
+import Kodlama.io.Devs.case4.business.requests.CreateProgrammingLanguageRequest;
+import Kodlama.io.Devs.case4.business.responses.GetAllProgrammingLanguagesResponse;
 import Kodlama.io.Devs.case4.dataAccess.abstracts.ProgrammingLanguageRepository;
 import Kodlama.io.Devs.case4.entities.concretes.ProgrammingLanguage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +24,20 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     }
 
     @Override
-    public List<ProgrammingLanguage> getAll() {
+    public List<GetAllProgrammingLanguagesResponse> getAll() {
 
-        Sort sort = Sort.by(Sort.Order.asc("id"));
-        return programmingLanguageRepository.findAll(sort);
+        List<ProgrammingLanguage> programmingLanguages = programmingLanguageRepository.findAll();
+        List<GetAllProgrammingLanguagesResponse> programmingLanguagesResponse = new ArrayList<>();
+
+        // Manuel mapping
+        for (ProgrammingLanguage programmingLanguage : programmingLanguages) {
+            GetAllProgrammingLanguagesResponse responseItem = new GetAllProgrammingLanguagesResponse();
+            responseItem.setId(programmingLanguage.getId());
+            responseItem.setName(programmingLanguage.getName());
+            programmingLanguagesResponse.add(responseItem);
+        }
+        //Sort sort = Sort.by(Sort.Order.asc("id"));
+        return programmingLanguagesResponse;
     }
     // This does not work and i can not get why!P
 //    @Override
@@ -71,17 +84,21 @@ public class ProgrammingLanguageManager implements ProgrammingLanguageService {
     }
 
     @Override
-    public void add(ProgrammingLanguage programmingLanguage) throws Exception{
+    public void add(CreateProgrammingLanguageRequest createProgrammingLanguageRequest) throws Exception{
 
-        if (programmingLanguage.getName() == null){
+        if (createProgrammingLanguageRequest.getName() == null){
             throw new Exception("Programming name can not be empty!");
         }
         for (ProgrammingLanguage theLanguage : programmingLanguageRepository.findAll()) {
-            if (theLanguage.getName().equalsIgnoreCase(programmingLanguage.getName())){
+            if (theLanguage.getName().equalsIgnoreCase(createProgrammingLanguageRequest.getName())){
                 throw new Exception("Programming language can not repeat!");
             }
         }
-        programmingLanguageRepository.save(programmingLanguage);
+
+        // Veritabanı Programming Language'dan anlıyor. O yüzden programmingLanguage döndürüyoruz.
+        ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
+        programmingLanguage.setName(createProgrammingLanguageRequest.getName());
+        this.programmingLanguageRepository.save(programmingLanguage);
     }
 
     @Override
