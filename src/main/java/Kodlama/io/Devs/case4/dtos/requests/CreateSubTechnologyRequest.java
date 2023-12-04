@@ -1,4 +1,4 @@
-package Kodlama.io.Devs.case4.business.requests;
+package Kodlama.io.Devs.case4.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
