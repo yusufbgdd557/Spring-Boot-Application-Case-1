@@ -2,23 +2,23 @@ package Kodlama.io.Devs.case4.webApi;
 
 import Kodlama.io.Devs.case4.business.abstracts.ProgrammingLanguageService;
 import Kodlama.io.Devs.case4.dtos.requests.CreateProgrammingLanguageRequest;
+import Kodlama.io.Devs.case4.dtos.requests.UpdateProgrammingLanguageRequest;
 import Kodlama.io.Devs.case4.dtos.responses.GetAllProgrammingLanguagesResponse;
+import Kodlama.io.Devs.case4.dtos.responses.GetByIdProgrammingLanguageResponse;
 import Kodlama.io.Devs.case4.entities.concretes.ProgrammingLanguage;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/programmingLanguages")
 public class ProgrammingLanguagesController {
 
-    private ProgrammingLanguageService programmingLanguageService;
-
     @Autowired
-    public ProgrammingLanguagesController(ProgrammingLanguageService programmingLanguageService) {
-        this.programmingLanguageService = programmingLanguageService;
-    }
+    private ProgrammingLanguageService programmingLanguageService;
 
     @GetMapping("/getAll")
     List<GetAllProgrammingLanguagesResponse> getAll(){
@@ -26,7 +26,7 @@ public class ProgrammingLanguagesController {
     }
 
     @GetMapping("/getById/{id}")
-    ProgrammingLanguage getById(@PathVariable int id) throws Exception {
+    GetByIdProgrammingLanguageResponse getById(@PathVariable int id) throws Exception {
         return programmingLanguageService.getById(id);
     }
 
@@ -46,8 +46,8 @@ public class ProgrammingLanguagesController {
     }
 
     @PutMapping("/update")
-    public void updateById(@RequestBody ProgrammingLanguage programmingLanguage) throws Exception {
-        this.programmingLanguageService.update(programmingLanguage);
+    public void updateById(@RequestBody UpdateProgrammingLanguageRequest updateProgrammingLanguage) throws Exception {
+        this.programmingLanguageService.update(updateProgrammingLanguage);
     }
 
 }

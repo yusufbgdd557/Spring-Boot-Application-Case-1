@@ -22,6 +22,6 @@ public class ProgrammingLanguage {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "programmingLanguage")//Sub Technologies sınıfında oluşturduğumuz referansa ithaf
+    @OneToMany(mappedBy = "programmingLanguage")//Sub Technologies sınıfında oluşturduğumuz referansa ithaf.
     private List<SubTechnology> subTechnologies;
 }

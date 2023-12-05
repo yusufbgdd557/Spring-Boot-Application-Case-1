@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateSubTechnologyRequest {
 
+    //Bu sınıfın var olmasının sebebi. Kullanıcıya veritabanını tamamen açmamaktır.
     private String subTechnologyName;
 
     private String programmingLanguageName;
+
 }
